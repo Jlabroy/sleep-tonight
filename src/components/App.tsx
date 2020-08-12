@@ -71,7 +71,11 @@ function App() {
               <span className="highlight">{nightTemp}°C</span>.
             </div>
             <div className="type--size-12">
-              <a href="https://www.sleepfoundation.org/bedroom-environment/touch/what-temperature-should-your-bedroom-be#:~:text=Many%20sleep%20experts%20say%20that,temperature%20rises%20and%20falls%20slightly.">
+              <a
+                target="_blank"
+                rel="noopener noreferrer"
+                href="https://www.sleepfoundation.org/bedroom-environment/touch/what-temperature-should-your-bedroom-be#:~:text=Many%20sleep%20experts%20say%20that,temperature%20rises%20and%20falls%20slightly."
+              >
                 Research
               </a>{" "}
               suggests optimal sleeping temperature is 18°C.
@@ -97,7 +101,7 @@ function App() {
               )}
             </div>
             <button disabled={loading} className="button button--primary">
-              Will I Sleep Tonight
+              Will I Sleep Tonight?
             </button>
           </form>
         )}
