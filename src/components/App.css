@@ -22,10 +22,34 @@
   color: white;
 }
 
+.App-share {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  background-color: white;
+}
+
 .App-header a {
   color: white;
 }
 
 .App--state-sleeping .App-header {
   color: #282c34;
+}
+
+.share-icons {
+  display: flex; 
+}
+
+.share-icons button {
+  margin: 2px;
+}
+
+.close {
+  position: absolute;
+  top: 25px;
+  right: 25px;
 }

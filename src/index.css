@@ -50,9 +50,23 @@ h1 {
   color: white;
 }
 
+.button--secondary {
+  background-color: white;
+  color: #282c34;
+}
+
+.button--tertiary {
+  background-color: transparent;
+  color: white;
+}
+
 .button--primary:hover,
 .button--primary:focus {
   background-color: #960b3b;
+}
+
+.margin--top-32 {
+  margin-top: 32px;
 }
 
 .margin--bottom-16 {
