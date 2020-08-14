@@ -2,8 +2,6 @@ import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import qs from "query-string";
 import useFetch from "use-http";
-import cityMap from "city-lat-long-map";
-import { upperCaseFirst } from "upper-case-first";
 import { IoMdClose } from "react-icons/io";
 import {
   EmailShareButton,
@@ -21,7 +19,8 @@ import {
 } from "react-share";
 import "./App.css";
 
-const API_KEY = "0ffcaa1c0d9c3570652fad8407bef54a";
+const API_KEY = process.env.REACT_APP_WEATHER_API_KEY;
+const MAPS_API_KEY = process.env.REACT_APP_MAPS_API_KEY;
 
 const getIfICanSleep = (weatherData: {
   hourly: { dt: number; temp: number }[];
@@ -45,27 +44,39 @@ function App() {
 
   const [nightTemp, setNightTemp] = useState<number | undefined>();
   const [isSharing, setIsSharing] = useState(false);
+  const [locationError, setLocationError] = useState("");
 
   const { get, loading, error } = useFetch(
     "https://api.openweathermap.org/data/2.5"
+  );
+  const { get: getCoords } = useFetch(
+    "https://maps.googleapis.com/maps/api/geocode"
   );
   const { handleSubmit, register, errors } = useForm<{ city: string }>();
 
   useEffect(() => {
     const fetchData = async () => {
       if (city && typeof city === "string") {
-        const coords = cityMap[upperCaseFirst(city)];
-        if (coords) {
-          const nightTemp = await get(
-            `/onecall?lat=${coords.lat}&lon=${coords.lng}&units=metric&exclude=minutely,daily&appid=${API_KEY}`
-          );
+        const coords = await getCoords(`/json?address=${city}&key=${MAPS_API_KEY}`);
 
-          setNightTemp(getIfICanSleep(nightTemp));
+        if (!coords?.results?.length) {
+          setLocationError("Couldn't find your city, please try another");
+          return;
         }
+
+        const { lat, lng } = coords.results[0].geometry.location;
+
+        const nightTemp = await get(
+          `/onecall?lat=${lat}&lon=${lng}&units=metric&exclude=minutely,daily&appid=${API_KEY}`
+        );
+
+        setNightTemp(getIfICanSleep(nightTemp));
       }
     };
+
+    setLocationError("");
     fetchData();
-  }, [city, get]);
+  }, [city, get, getCoords]);
 
   const isSleeping = nightTemp && nightTemp < 20;
 
@@ -185,6 +196,11 @@ function App() {
                     errors.city && "input--state-error"
                   }`}
                 />
+                {locationError && (
+                  <div className="banner banner--state-error margin--bottom-16">
+                    {locationError}
+                  </div>
+                )}
                 {errors.city && (
                   <div className="banner banner--state-error margin--bottom-16">
                     Please enter your city!
