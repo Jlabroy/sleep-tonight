@@ -38,7 +38,7 @@ const getIfICanSleep = (weatherData: {
   );
 };
 
-const appUrl = "https://sleep-tonight-a6a96.web.app/";
+const appUrl = "https://will-i-sleep-tonight.com/";
 
 function App() {
   const { city } = qs.parse(window.location.search);
